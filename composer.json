@@ -1,5 +1,5 @@
 {
-    "name": "slashtrace/slashtrace",
+    "name": "dotink/slashtrace",
     "description": "SlashTrace - Awesome error handler",
     "type": "library",
     "license": "MIT",
@@ -7,16 +7,21 @@
         {
             "name": "Victor Stanciu",
             "email": "vic.stanciu@gmail.com"
+        },
+        {
+            "name": "Matthew J. Sahagian",
+            "email": "matthew.sahagian@gmail.com"
         }
     ],
     "require": {
-        "php": ">= 5.6",
+        "php": ">=7.2",
         "league/plates": "^3.3",
-        "symfony/var-dumper": "^3.2",
+        "symfony/var-dumper": "^5.0",
         "league/climate": "^3.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.0"
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^8.5"
     },
     "autoload": {
         "psr-4": {

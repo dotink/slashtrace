@@ -25,7 +25,7 @@ class SlashTraceTest extends TestCase
     /** @var MockSystemProvider */
     private $system;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->system = new MockSystemProvider();
         $this->slashtrace = new SlashTrace();

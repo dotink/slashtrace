@@ -13,7 +13,7 @@ class StackFrameContextExtractorTest extends TestCase
     /** @var StackFrameContextExtractor */
     private $extractor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->extractor = new StackFrameContextExtractor();

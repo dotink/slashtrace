@@ -17,7 +17,7 @@ class TemplateHelperTest extends TestCase
     /** @var StackFrame */
     private $frame;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -13,7 +13,7 @@ class StackTraceTagFormatterTest extends TestCase
     /** @var StackTraceTagFormatter */
     private $formatter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->formatter = new StackTraceTagFormatter();

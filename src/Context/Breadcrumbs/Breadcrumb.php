@@ -52,7 +52,7 @@ class Breadcrumb implements JsonSerializable
         return $this->dateTime;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             "title" => $this->getTitle(),

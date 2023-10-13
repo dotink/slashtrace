@@ -16,7 +16,7 @@ class EventContextTest extends TestCase
     /** @var EventContext */
     private $context;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->context = new EventContext();

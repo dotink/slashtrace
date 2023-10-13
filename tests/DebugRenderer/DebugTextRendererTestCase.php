@@ -35,7 +35,7 @@ abstract class DebugTextRendererTestCase extends TestCase
      */
     abstract protected function createRenderer();
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

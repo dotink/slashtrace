@@ -14,7 +14,7 @@ class SerializerTest extends TestCase
     /** @var Serializer */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->serializer = new Serializer();

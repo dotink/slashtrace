@@ -15,7 +15,7 @@ class DebugJsonRendererTest extends TestCase
     /** @var MockSystemProvider */
     private $system;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

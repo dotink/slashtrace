@@ -79,7 +79,7 @@ class Breadcrumbs implements JsonSerializable
         $this->crumbs = [];
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->crumbs;
     }
