@@ -43,7 +43,7 @@ class DebugHandler implements EventHandler
 	/**
 	 * {@inheritDoc}
 	 */
-	public function handleException(Exception $exception): int
+	public function handleException($exception): int
 	{
 		$event = $this->createEvent($exception);
 		$event->setContext($this->getEventContext());
