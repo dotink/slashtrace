@@ -2,8 +2,8 @@
 
 namespace SlashTrace\EventHandler;
 
-use Exception;
 use TypeError;
+use Exception;
 use SlashTrace\Context\User;
 
 /**
@@ -16,7 +16,7 @@ interface EventHandler
 
 
 	/**
-	 * @param Exception|TypeError $exception
+	 * @param TypeError|Exception $exception
 	 * @throws EventHandlerException
 	 */
 	public function handleException($exception): int;

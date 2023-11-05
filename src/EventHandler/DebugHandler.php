@@ -16,6 +16,7 @@ use SlashTrace\Level;
 use SlashTrace\System\HasSystemProvider;
 
 use ErrorException;
+use TypeError;
 use Exception;
 
 /**
@@ -105,9 +106,9 @@ class DebugHandler implements EventHandler
 	}
 
 	/**
-	 *
+	 * @param TypeError|Exception $exception
 	 */
-	private function createEvent(Exception $exception): Event
+	private function createEvent($exception): Event
 	{
 		$event = new Event();
 		$event->setLevel($this->getLevel($exception));
@@ -134,9 +135,9 @@ class DebugHandler implements EventHandler
 
 
 	/**
-	 *
+	 * @param TypeError|Exception $exception
 	 */
-	private function getLevel(Exception $exception): string
+	private function getLevel($exception): string
 	{
 		$level = Level::ERROR;
 		if ($exception instanceof ErrorException) {
