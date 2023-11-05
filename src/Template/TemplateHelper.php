@@ -7,106 +7,134 @@ use SlashTrace\Formatter\StackFrameCallHtmlFormatter;
 use SlashTrace\Formatter\VarDumper;
 use SlashTrace\StackTrace\StackFrame;
 
+/**
+ *
+ */
 class TemplateHelper
 {
-    /** @var VarDumper */
-    private $varDumper;
+	/**
+	 * @var VarDumper|null
+	 */
+	private $varDumper;
 
-    /** @var StackFrameCallFormatter */
-    private $stackFrameCallFormatter;
+	/**
+	 * @var StackFrameCallFormatter|null
+	 */
+	private $stackFrameCallFormatter;
 
-    /**
-     * @param StackFrame $frame
-     * @return string
-     */
-    public function formatStackFrameCall(StackFrame $frame)
-    {
-        return $this->getStackFrameCallFormatter()->format($frame);
-    }
 
-    public function formatStackFrameContext(StackFrame $frame)
-    {
-        $lines = $frame->getContext();
-        if (!count($lines)) {
-            return "";
-        }
+	/**
+	 *
+	 */
+	public function formatStackFrameCall(StackFrame $frame): string
+	{
+		return $this->getStackFrameCallFormatter()->format($frame);
+	}
 
-        $attributes = [];
 
-        $firstLine = array_keys($lines)[0];
-        if ($firstLine > 1) {
-            $attributes["data-start"] = $firstLine;
-        }
+	/**
+	 *
+	 */
+	public function formatStackFrameContext(StackFrame $frame): string
+	{
+		$lines = $frame->getContext();
 
-        $line = $frame->getLine();
-        if (!is_null($line)) {
-            $attributes["data-line"] = $line;
-        }
+		if (!count($lines)) {
+			return '';
+		}
 
-        $attributes = $this->formatHMLAttributes($attributes);
+		$attributes = [];
+		$firstLine  = array_keys($lines)[0];
 
-        $return = $attributes ? "<pre $attributes>" : "<pre>";
-        $return .= implode("\n", $this->escapeCodeLines($lines));
-        $return .= "</pre>";
+		if ($firstLine > 1) {
+			$attributes["data-start"] = $firstLine;
+		}
 
-        return $return;
-    }
+		$line = $frame->getLine();
+		if (!is_null($line)) {
+			$attributes["data-line"] = $line;
+		}
 
-    /**
-     * @param array $attributes
-     * @return string
-     */
-    private function formatHMLAttributes(array $attributes)
-    {
-        $return = [];
-        foreach ($attributes as $key => $value) {
-            $return[] = "$key=\"$value\"";
-        }
-        return implode(" ", $return);
-    }
+		$attributes = $this->formatHMLAttributes($attributes);
 
-    /**
-     * @param array $lines
-     * @return array
-     */
-    private function escapeCodeLines(array $lines)
-    {
-        $return = [];
-        foreach ($lines as $line) {
-            if (!strlen($line)) {
-                $line = " ";
-            }
-            $return[] = htmlentities($line, ENT_QUOTES, "UTF-8");
-        }
-        return $return;
-    }
+		$return = $attributes ? "<pre $attributes>" : "<pre>";
+		$return .= implode("\n", $this->escapeCodeLines($lines));
+		$return .= "</pre>";
 
-    public function dump($argument)
-    {
-        return $this->getVarDumper()->dump($argument);
-    }
+		return $return;
+	}
 
-    public function getVarDumper()
-    {
-        if (is_null($this->varDumper)) {
-            $this->varDumper = new VarDumper();
-        }
-        return $this->varDumper;
-    }
+	/**
+	 * @param array<string, mixed> $attributes
+	 */
+	private function formatHMLAttributes(array $attributes): string
+	{
+		$return = [];
+		foreach ($attributes as $key => $value) {
+			$return[] = "$key=\"$value\"";
+		}
+		return implode(" ", $return);
+	}
 
-    public function setVarDumper(VarDumper $dumper)
-    {
-        $this->varDumper = $dumper;
-    }
+	/**
+	 * @param array<string> $lines
+	 * @return array<string>
+	 */
+	private function escapeCodeLines(array $lines): array
+	{
+		$return = [];
+		foreach ($lines as $line) {
+			if (!strlen($line)) {
+				$line = " ";
+			}
+			$return[] = htmlentities($line, ENT_QUOTES, "UTF-8");
+		}
+		return $return;
+	}
 
-    /**
-     * @return StackFrameCallFormatter
-     */
-    private function getStackFrameCallFormatter()
-    {
-        if (is_null($this->stackFrameCallFormatter)) {
-            $this->stackFrameCallFormatter = new StackFrameCallHtmlFormatter();
-        }
-        return $this->stackFrameCallFormatter;
-    }
+
+	/**
+	 * @param mixed $argument
+	 */
+	public function dump($argument): string
+	{
+		return $this->getVarDumper()->dump($argument);
+	}
+
+
+	/**
+	 *
+	 */
+	public function getVarDumper(): VarDumper
+	{
+		if (is_null($this->varDumper)) {
+			$this->varDumper = new VarDumper();
+		}
+
+		return $this->varDumper;
+	}
+
+
+	/**
+	 *
+	 */
+	public function setVarDumper(VarDumper $dumper): self
+	{
+		$this->varDumper = $dumper;
+
+		return $this;
+	}
+
+
+	/**
+	 *
+	 */
+	private function getStackFrameCallFormatter(): StackFrameCallFormatter
+	{
+		if (is_null($this->stackFrameCallFormatter)) {
+			$this->stackFrameCallFormatter = new StackFrameCallHtmlFormatter();
+		}
+
+		return $this->stackFrameCallFormatter;
+	}
 }

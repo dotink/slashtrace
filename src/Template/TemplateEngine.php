@@ -2,12 +2,13 @@
 
 namespace SlashTrace\Template;
 
+/**
+ *
+ */
 interface TemplateEngine
 {
-    /**
-     * @param string $template
-     * @param array $data
-     * @return string
-     */
-    public function render($template, array $data);
+	/**
+	 * @param array<string, mixed> $data
+	 */
+	public function render(string $template, array $data): string;
 }
