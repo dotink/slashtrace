@@ -24,14 +24,14 @@
         "phpunit/phpunit": "^8.5"
     },
     "autoload": {
-        "psr-4": {
-            "SlashTrace\\": "src/"
-        }
+        "classmap": [
+            "src"
+        ]
     },
     "autoload-dev": {
-        "psr-4": {
-            "SlashTrace\\Tests\\": "tests/",
-            "SlashTrace\\Tests\\Fixtures\\Code\\": "tests/Fixtures/code/"
-        }
+        "classmap": [
+            "test/src",
+            "test/cases"
+        ]
     }
 }

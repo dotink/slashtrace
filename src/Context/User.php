@@ -7,72 +7,90 @@ use JsonSerializable;
 
 class User implements JsonSerializable
 {
-    /** @var string */
-    private $id;
+	/**
+	 * @var string|null
+	 */
+	private $id;
 
-    /** @var string */
-    private $email;
+	/**
+	 * @var string|null
+	 */
+	private $email;
 
-    /** @var string */
-    private $name;
+	/**
+	 * @var string|null
+	 */
+	private $name;
 
-    /**
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
-    /**
-     * @param string $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
+	/**
+	 *
+	 */
+	public function getId(): ?string
+	{
+		return $this->id;
+	}
 
-    /**
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
+	/**
+	 * @param string $id
+	 */
+	public function setId(?string $id): self
+	{
+		$this->id = $id;
 
-    /**
-     * @param string $email
-     */
-    public function setEmail($email)
-    {
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidArgumentException("Invalid email address");
-        }
-        $this->email = $email;
-    }
+		return $this;
+	}
 
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
+	/**
+	 *
+	 */
+	public function getEmail(): ?string
+	{
+		return $this->email;
+	}
 
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
+	/**
+	 *
+	 */
+	public function setEmail(?string $email): self
+	{
+		if ($email && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			throw new InvalidArgumentException("Invalid email address");
+		}
 
-    public function jsonSerialize()
-    {
-        return array_filter([
-            "id"    => $this->getId(),
-            "email" => $this->getEmail(),
-            "name"  => $this->getName(),
-        ]);
-    }
+		$this->email = $email;
+
+		return $this;
+	}
+
+	/**
+	 *
+	 */
+	public function getName(): ?string
+	{
+		return $this->name;
+	}
+
+	/**
+	 *
+	 */
+	public function setName(?string $name): self
+	{
+		$this->name = $name;
+
+		return $this;
+	}
+
+
+	/**
+	 * @return array<mixed, string|null>
+	 */
+	public function jsonSerialize(): array
+	{
+		return array_filter([
+			"id"    => $this->getId(),
+			"email" => $this->getEmail(),
+			"name"  => $this->getName(),
+		]);
+	}
 }

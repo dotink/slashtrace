@@ -2,85 +2,101 @@
 
 namespace SlashTrace\Context;
 
-use JsonSerializable;
 use SlashTrace\Context\Breadcrumbs\Breadcrumb;
 use SlashTrace\System\SystemProvider;
+use JsonSerializable;
 use DateTime;
 
+/**
+ *
+ */
 class Breadcrumbs implements JsonSerializable
 {
-    const MAX_SIZE = 25;
+	const MAX_SIZE = 25;
 
-    /** @var SystemProvider */
-    private $system;
+	/**
+	 * @var SystemProvider
+	 */
+	private $system;
 
-    /** @var Breadcrumb[] */
-    private $crumbs = [];
+	/**
+	 *  @var Breadcrumb[]
+	 */
+	private $crumbs = [];
 
-    public function __construct(SystemProvider $system)
-    {
-        $this->system = $system;
-    }
 
-    /**
-     * @param string $title
-     * @param array $data
-     */
-    public function record($title, array $data = [])
-    {
-        $breadcrumb = new Breadcrumb($title, $data, $this->getDateTime());
+	/**
+	 *
+	 */
+	public function __construct(SystemProvider $system)
+	{
+		$this->system = $system;
+	}
 
-        if ($this->getSize() == self::MAX_SIZE) {
-            array_shift($this->crumbs);
-        }
+	/**
+	 * @param array<string, mixed> $data
+	 */
+	public function record(string $title, array $data = []): void
+	{
+		$breadcrumb = new Breadcrumb($title, $data, $this->getDateTime());
 
-        $this->crumbs[] = $breadcrumb;
-    }
+		if ($this->getSize() == self::MAX_SIZE) {
+			array_shift($this->crumbs);
+		}
 
-    /**
-     * @return Breadcrumb[]
-     */
-    public function getCrumbs()
-    {
-        return $this->crumbs;
-    }
+		$this->crumbs[] = $breadcrumb;
+	}
 
-    /**
-     * @return DateTime
-     */
-    protected function getDateTime()
-    {
-        return $this->system->getDateTime();
-    }
+	/**
+	 * @return Breadcrumb[]
+	 */
+	public function getCrumbs()
+	{
+		return $this->crumbs;
+	}
 
-    /**
-     * @return int
-     */
-    public function getMaxSize()
-    {
-        return self::MAX_SIZE;
-    }
+	/**
+	 * @return DateTime
+	 */
+	protected function getDateTime()
+	{
+		return $this->system->getDateTime();
+	}
 
-    /**
-     * @return int
-     */
-    private function getSize()
-    {
-        return count($this->crumbs);
-    }
+	/**
+	 * @return int
+	 */
+	public function getMaxSize()
+	{
+		return self::MAX_SIZE;
+	}
 
-    public function isEmpty()
-    {
-        return $this->getSize() == 0;
-    }
+	/**
+	 * @return int
+	 */
+	private function getSize()
+	{
+		return count($this->crumbs);
+	}
 
-    public function clear()
-    {
-        $this->crumbs = [];
-    }
+	public function isEmpty(): bool
+	{
+		return $this->getSize() == 0;
+	}
 
-    public function jsonSerialize(): array
-    {
-        return $this->crumbs;
-    }
+	public function clear(): self
+	{
+		$this->crumbs = [];
+
+		return $this;
+	}
+
+
+	/**
+	 * @return array<string, mixed>
+	 */
+	public function jsonSerialize(): array
+	{
+		return $this->crumbs;
+	}
 }

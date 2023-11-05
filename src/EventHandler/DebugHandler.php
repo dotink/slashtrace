@@ -18,163 +18,204 @@ use SlashTrace\System\HasSystemProvider;
 use ErrorException;
 use Exception;
 
+/**
+ *
+ */
 class DebugHandler implements EventHandler
 {
-    use HasSystemProvider;
+	use HasSystemProvider;
 
-    /** @var DebugRenderer */
-    private $renderer;
+	/**
+	 * @var DebugRenderer
+	 */
+	private $renderer;
 
-    /** @var ExceptionInspector */
-    private $exceptionInspector;
+	/**
+	 * @var ExceptionInspector
+	 */
+	private $exceptionInspector;
 
-    /** @var EventContext */
-    private $eventContext;
+	/**
+	 * @var EventContext
+	 */
+	private $eventContext;
 
-    /**
-     * @param Exception $exception
-     * @return int
-     */
-    public function handleException($exception)
-    {
-        $event = $this->createEvent($exception);
-        $event->setContext($this->getEventContext());
+	/**
+	 * {@inheritDoc}
+	 */
+	public function handleException(Exception $exception): int
+	{
+		$event = $this->createEvent($exception);
+		$event->setContext($this->getEventContext());
 
-        return $this->handleEvent($event);
-    }
+		return $this->handleEvent($event);
+	}
 
-    public function handleEvent(Event $event)
-    {
-        $this->getRenderer()->render($event);
-        return EventHandler::SIGNAL_EXIT;
-    }
+	/**
+	 *
+	 */
+	public function handleEvent(Event $event): int
+	{
+		$this->getRenderer()->render($event);
 
-    /**
-     * @return DebugRenderer
-     */
-    public function getRenderer()
-    {
-        if (is_null($this->renderer)) {
-            $this->renderer = $this->createRenderer();
-        }
-        return $this->renderer;
-    }
+		return EventHandler::SIGNAL_EXIT;
+	}
 
-    public function setRenderer(DebugRenderer $renderer)
-    {
-        $this->renderer = $renderer;
-    }
+	/**
+	 *
+	 */
+	public function getRenderer(): DebugRenderer
+	{
+		if (is_null($this->renderer)) {
+			$this->renderer = $this->createRenderer();
+		}
+		return $this->renderer;
+	}
 
-    /**
-     * @return DebugRenderer
-     */
-    private function createRenderer()
-    {
-        $system = $this->getSystem();
-        if ($system->isCli()) {
-            return new DebugCliRenderer();
-        }
+	/**
+	 *
+	 */
+	public function setRenderer(DebugRenderer $renderer): self
+	{
+		$this->renderer = $renderer;
 
-        $request = $system->getHttpRequest();
-        if ($request->getHeader("Accept") === "application/json") {
-            return new DebugJsonRenderer();
-        }
+		return $this;
+	}
 
-        if ($request->isXhr()) {
-            return new DebugTextRenderer();
-        }
+	/**
+	 *
+	 */
+	private function createRenderer(): DebugRenderer
+	{
+		$system = $this->getSystem();
+		if ($system->isCli()) {
+			return new DebugCliRenderer();
+		}
 
-        return new DebugWebRenderer();
-    }
+		$request = $system->getHttpRequest();
+		if ($request->getHeader("Accept") === "application/json") {
+			return new DebugJsonRenderer();
+		}
 
-    /**
-     * @param Exception $exception
-     * @return Event
-     */
-    private function createEvent($exception)
-    {
-        $event = new Event();
-        $event->setLevel($this->getLevel($exception));
+		if ($request->isXhr()) {
+			return new DebugTextRenderer();
+		}
 
-        $exceptionInspector = $this->getExceptionInspector();
-        do {
-            $event->addException($exceptionInspector->inspect($exception));
-        } while ($exception = $exception->getPrevious());
+		return new DebugWebRenderer();
+	}
 
-        return $event;
-    }
+	/**
+	 *
+	 */
+	private function createEvent(Exception $exception): Event
+	{
+		$event = new Event();
+		$event->setLevel($this->getLevel($exception));
 
-    private function getExceptionInspector()
-    {
-        if (is_null($this->exceptionInspector)) {
-            $this->exceptionInspector = new ExceptionInspector();
-        }
-        return $this->exceptionInspector;
-    }
+		$exceptionInspector = $this->getExceptionInspector();
+		do {
+			$event->addException($exceptionInspector->inspect($exception));
+		} while ($exception = $exception->getPrevious());
 
-    /**
-     * @param Exception $exception
-     * @return string
-     */
-    private function getLevel($exception)
-    {
-        $level = Level::ERROR;
-        if ($exception instanceof ErrorException) {
-            $level = Level::severityToLevel($exception->getSeverity());
-        }
-        return $level;
-    }
+		return $event;
+	}
 
-    /**
-     * @return EventContext
-     */
-    private function getEventContext()
-    {
-        if (is_null($this->eventContext)) {
-            $this->eventContext = $this->createEventContext();
-        }
-        return $this->eventContext;
-    }
 
-    /**
-     * @return EventContext
-     */
-    private function createEventContext()
-    {
-        $system = $this->getSystem();
+	/**
+	 *
+	 */
+	private function getExceptionInspector(): ExceptionInspector
+	{
+		if (is_null($this->exceptionInspector)) {
+			$this->exceptionInspector = new ExceptionInspector();
+		}
+		return $this->exceptionInspector;
+	}
 
-        $context = new EventContext();
-        $context->setServer($system->getServerData());
-        $context->setBreadcrumbs(new Breadcrumbs($system));
 
-        if ($system->isWeb()) {
-            $context->setHttpRequest($system->getHttpRequest());
-        }
+	/**
+	 *
+	 */
+	private function getLevel(Exception $exception): string
+	{
+		$level = Level::ERROR;
+		if ($exception instanceof ErrorException) {
+			$level = Level::severityToLevel($exception->getSeverity());
+		}
+		return $level;
+	}
 
-        return $context;
-    }
 
-    /**
-     * @param User $user
-     * @throws Exception
-     */
-    public function setUser(User $user)
-    {
-        $this->getEventContext()->setUser($user);
-    }
+	/**
+	 *
+	 */
+	private function getEventContext(): EventContext
+	{
+		if (is_null($this->eventContext)) {
+			$this->eventContext = $this->createEventContext();
+		}
+		return $this->eventContext;
+	}
 
-    public function recordBreadcrumb($title, array $data = [])
-    {
-        $this->getEventContext()->getBreadcrumbs()->record($title, $data);
-    }
 
-    public function setApplicationPath($path)
-    {
-        $this->getEventContext()->setApplicationPath($path);
-    }
+	/**
+	 *
+	 */
+	private function createEventContext(): EventContext
+	{
+		$system = $this->getSystem();
 
-    public function setRelease($release)
-    {
-        $this->getEventContext()->setRelease($release);
-    }
+		$context = new EventContext();
+		$context->setServer($system->getServerData());
+		$context->setBreadcrumbs(new Breadcrumbs($system));
+
+		if ($system->isWeb()) {
+			$context->setHttpRequest($system->getHttpRequest());
+		}
+
+		return $context;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function setUser(User $user): self
+	{
+		$this->getEventContext()->setUser($user);
+
+		return $this;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function recordBreadcrumb(string $title, array $data = []): self
+	{
+		$this->getEventContext()->getBreadcrumbs()->record($title, $data);
+
+		return $this;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function setApplicationPath(string $path): self
+	{
+		$this->getEventContext()->setApplicationPath($path);
+
+		return $this;
+	}
+
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function setRelease($release): self
+	{
+		$this->getEventContext()->setRelease($release);
+
+		return $this;
+	}
 }

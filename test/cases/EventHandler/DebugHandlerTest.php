@@ -41,7 +41,7 @@ class DebugHandlerTest extends TestCase
         $this->handler->setSystem($this->system);
     }
 
-    private function handleException(Exception $e = null)
+    private function handleException(Exception $e = null): int
     {
         return $this->handler->handleException($e ?: new Exception());
     }

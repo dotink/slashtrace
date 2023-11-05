@@ -30,11 +30,14 @@ class SlashTrace
                 if ($handler->handleException($exception) === EventHandler::SIGNAL_EXIT) {
                     return EventHandler::SIGNAL_EXIT;
                 }
+
             } catch (EventHandlerException $exception) {
                 $this->logHandlerException($exception);
+
                 return EventHandler::SIGNAL_EXIT;
             }
         }
+
         return EventHandler::SIGNAL_CONTINUE;
     }
 
@@ -92,31 +95,39 @@ class SlashTrace
         $errorHandler->install();
     }
 
-    public function setUser(User $user)
+    public function setUser(User $user): self
     {
         foreach ($this->getHandlers() as $handler) {
             $handler->setUser($user);
         }
+
+        return $this;
     }
 
-    public function recordBreadcrumb($title, array $data = [])
+    public function recordBreadcrumb(string $title, array $data = []): self
     {
         foreach ($this->getHandlers() as $handler) {
             $handler->recordBreadcrumb($title, $data);
         }
+
+        return $this;
     }
 
-    public function setRelease($release)
+    public function setRelease(string $release): self
     {
         foreach ($this->getHandlers() as $handler) {
             $handler->setRelease($release);
         }
+
+        return $this;
     }
 
-    public function setApplicationPath($path)
+    public function setApplicationPath(string $path): self
     {
         foreach ($this->getHandlers() as $handler) {
             $handler->setApplicationPath($path);
         }
+
+        return $this;
     }
 }

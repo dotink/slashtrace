@@ -2,143 +2,190 @@
 
 namespace SlashTrace\Context;
 
-use Exception;
-use JsonSerializable;
 use SlashTrace\Http\Request;
+use JsonSerializable;
+use Exception;
 
+/**
+ *
+ */
 class EventContext implements JsonSerializable
 {
-    /** @var string */
-    private $release;
+	/**
+	 * @var string|null
+	 * */
+	private $release;
 
-    /** @var Request */
-    private $httpRequest;
+	/**
+	 * @var Request
+	 */
+	private $httpRequest;
 
-    /** @var array */
-    private $server = [];
+	/**
+	 * @var array<string, mixed>
+	 */
+	private $server = [];
 
-    /** @var User */
-    private $user;
+	/**
+	 * @var User|null
+	 */
+	private $user;
 
-    /** @var Breadcrumbs */
-    private $breadcrumbs;
+	/**
+	 * @var Breadcrumbs|null
+	 */
+	private $breadcrumbs;
 
-    /** @var string */
-    private $applicationPath;
+	/**
+	 * @var string|null
+	 */
+	private $applicationPath;
 
-    /**
-     * @return string
-     */
-    public function getRelease()
-    {
-        return $this->release;
-    }
 
-    /**
-     * @param string $release
-     */
-    public function setRelease($release)
-    {
-        $this->release = $release;
-    }
+	/**
+	 *
+	 */
+	public function getRelease(): ?string
+	{
+		return $this->release;
+	}
 
-    /**
-     * @return Request
-     */
-    public function getHTTPRequest()
-    {
-        return $this->httpRequest;
-    }
 
-    /**
-     * @param Request $request
-     */
-    public function setHttpRequest(Request $request)
-    {
-        $this->httpRequest = $request;
-    }
+	/**
+	 *
+	 */
+	public function setRelease(?string $release): self
+	{
+		$this->release = $release;
 
-    /**
-     * @return array
-     */
-    public function getServer()
-    {
-        return $this->server;
-    }
+		return $this;
+	}
 
-    public function setServer(array $server)
-    {
-        $this->server = $server;
-    }
+	/**
+	 * @return Request
+	 */
+	public function getHTTPRequest(): Request
+	{
+		return $this->httpRequest;
+	}
 
-    /**
-     * @return User
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
+	/**
+	 *
+	 */
+	public function setHttpRequest(Request $request): self
+	{
+		$this->httpRequest = $request;
 
-    /**
-     * @param User $user
-     * @throws Exception
-     */
-    public function setUser(User $user)
-    {
-        if (is_null($user->getId()) && is_null($user->getEmail())) {
-            throw new Exception("User must have ID or email address");
-        }
-        $this->user = $user;
-    }
+		return $this;
+	}
 
-    /**
-     * @return Breadcrumbs
-     */
-    public function getBreadcrumbs()
-    {
-        return $this->breadcrumbs;
-    }
+	/**
+	 * @return array<string, mixed>
+	 */
+	public function getServer(): array
+	{
+		return $this->server;
+	}
 
-    public function setBreadcrumbs(Breadcrumbs $breadcrumbs)
-    {
-        $this->breadcrumbs = $breadcrumbs;
-    }
+	/**
+	 * @param array<string, mixed> $server
+	 */
+	public function setServer(array $server): self
+	{
+		$this->server = $server;
 
-    /**
-     * @return string
-     */
-    public function getApplicationPath()
-    {
-        return $this->applicationPath;
-    }
+		return $this;
+	}
 
-    /**
-     * @param string $applicationPath
-     */
-    public function setApplicationPath($applicationPath)
-    {
-        // Force the use of the cross-platform directory separator
-        $this->applicationPath = str_replace("\\", "/", $applicationPath);
-    }
+	/**
+	 *
+	 */
+	public function getUser(): ?User
+	{
+		return $this->user;
+	}
 
-    public function hasCustomData()
-    {
-        $breadcrumbs = $this->getBreadcrumbs();
-        if (!is_null($breadcrumbs) && !$breadcrumbs->isEmpty()) {
-            return true;
-        }
-        return !is_null($this->getRelease()) || !is_null($this->getUser());
-    }
+	/**
+	 * @throws Exception
+	 */
+	public function setUser(?User $user): self
+	{
+		if (empty($user->getId()) && empty($user->getEmail())) {
+			throw new Exception("User must have ID or email address");
+		}
 
-    public function jsonSerialize(): array
-    {
-        return array_filter([
-            "request"          => $this->getHTTPRequest(),
-            "server"           => $this->getServer(),
-            "user"             => $this->getUser(),
-            "breadcrumbs"      => $this->getBreadcrumbs(),
-            "release"          => $this->getRelease(),
-            "application_path" => $this->getApplicationPath(),
-        ]);
-    }
+		$this->user = $user;
+
+		return $this;
+	}
+
+	/**
+	 *
+	 */
+	public function getBreadcrumbs(): ?Breadcrumbs
+	{
+		return $this->breadcrumbs;
+	}
+
+
+	/**
+	 *
+	 */
+	public function setBreadcrumbs(?Breadcrumbs $breadcrumbs): self
+	{
+		$this->breadcrumbs = $breadcrumbs;
+
+		return $this;
+	}
+
+
+	/**
+	 *
+	 */
+	public function getApplicationPath(): ?string
+	{
+		return $this->applicationPath;
+	}
+
+	/**
+	 *
+	 */
+	public function setApplicationPath(?string $applicationPath): self
+	{
+		// Force the use of the cross-platform directory separator
+		$this->applicationPath = str_replace("\\", "/", $applicationPath);
+
+		return $this;
+	}
+
+
+	/**
+	 *
+	 */
+	public function hasCustomData(): bool
+	{
+		$breadcrumbs = $this->getBreadcrumbs();
+
+		if (!empty($breadcrumbs) && !$breadcrumbs->isEmpty()) {
+			return TRUE;
+		}
+
+		return !empty($this->getRelease()) || !empty($this->getUser());
+	}
+
+
+	/**
+	 * @return array<string, mixed>
+	 */
+	public function jsonSerialize(): array
+	{
+		return array_filter([
+			"request"          => $this->getHTTPRequest(),
+			"server"           => $this->getServer(),
+			"user"             => $this->getUser(),
+			"breadcrumbs"      => $this->getBreadcrumbs(),
+			"release"          => $this->getRelease(),
+			"application_path" => $this->getApplicationPath(),
+		]);
+	}
 }
