@@ -1,7 +1,9 @@
 {
+    "type": "library",
     "name": "dotink/slashtrace",
     "description": "SlashTrace - Awesome error handler",
-    "type": "library",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "license": "MIT",
     "authors": [
         {
