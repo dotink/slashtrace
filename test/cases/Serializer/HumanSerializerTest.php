@@ -14,7 +14,6 @@ class HumanSerializerTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->serializer = new HumanSerializer();
     }
 
@@ -69,7 +68,7 @@ class HumanSerializerTest extends TestCase
 
     public function testClosure()
     {
-        $this->compare("Object[Closure]", function () {});
+        $this->compare("Object[Closure]", function (): void {});
     }
 
     public function testString()

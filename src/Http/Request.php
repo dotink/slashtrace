@@ -49,7 +49,7 @@ class Request implements JsonSerializable
      */
     public function getHeaderName($serverKey)
     {
-        if (substr($serverKey, 0, 5) == "HTTP_") {
+        if (str_starts_with($serverKey, "HTTP_")) {
             $serverKey = substr($serverKey, 5);
 
         } elseif (!in_array($serverKey, ["CONTENT_TYPE", "CONTENT_LENGTH", "CONTENT_MD5"])) {
@@ -67,7 +67,7 @@ class Request implements JsonSerializable
     public function getHeader($header)
     {
         $headers = $this->getHeaders();
-        return isset($headers[$header]) ? $headers[$header] : null;
+        return $headers[$header] ?? null;
     }
 
     /**
@@ -75,7 +75,7 @@ class Request implements JsonSerializable
      */
     public function getGetData()
     {
-        return isset($_GET) ? $_GET : [];
+        return $_GET ?? [];
     }
 
     /**
@@ -83,7 +83,7 @@ class Request implements JsonSerializable
      */
     public function getPostData()
     {
-        return isset($_POST) ? $_POST : [];
+        return $_POST ?? [];
     }
 
     /**
@@ -91,7 +91,7 @@ class Request implements JsonSerializable
      */
     public function getCookies()
     {
-        return isset($_COOKIE) ? $_COOKIE : [];
+        return $_COOKIE ?? [];
     }
 
     /**
@@ -102,14 +102,14 @@ class Request implements JsonSerializable
     {
         $https = $this->isHTTPS();
 
-        $protocol = strtolower($_SERVER["SERVER_PROTOCOL"]);
+        $protocol = strtolower((string) $_SERVER["SERVER_PROTOCOL"]);
         $protocol = substr($protocol, 0, strpos($protocol, "/")) . ($https ? "s" : "");
 
         $port = $_SERVER["SERVER_PORT"];
         $port = ($port == 80 && !$https) || ($port == 443 && $https) ? "" : ":$port";
 
-        $host = isset($_SERVER["HTTP_HOST"]) ? $_SERVER["HTTP_HOST"] : null;
-        $host = $host ? $host : $_SERVER["SERVER_NAME"] . $port;
+        $host = $_SERVER["HTTP_HOST"] ?? null;
+        $host = $host ?: $_SERVER["SERVER_NAME"] . $port;
 
         return "$protocol://$host" . $_SERVER["REQUEST_URI"];
     }
@@ -131,7 +131,7 @@ class Request implements JsonSerializable
             if (!array_key_exists($key, $_SERVER)) {
                 continue;
             }
-            foreach (explode(",", $_SERVER[$key]) as $ip) {
+            foreach (explode(",", (string) $_SERVER[$key]) as $ip) {
                 $ip = trim($ip);
                 if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) !== false) {
                     return $ip;

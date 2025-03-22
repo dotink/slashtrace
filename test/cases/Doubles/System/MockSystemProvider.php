@@ -99,7 +99,7 @@ class MockSystemProvider extends OutputReceiverSpy implements SystemProvider
         $this->request = null;
     }
 
-    public function setIsWeb(Request $request = null)
+    public function setIsWeb(?Request $request = null)
     {
         $this->request = $request ?: new Request();
         $this->isCli = false;

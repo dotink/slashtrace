@@ -21,7 +21,6 @@ abstract class StackFrameCallFormatterTestCase extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->formatter = $this->createFormatter();
         $this->frame = new StackFrame();
     }

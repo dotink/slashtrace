@@ -97,7 +97,7 @@ class System implements SystemProvider
         }
     }
 
-    public function terminate($status = 0)
+    public function terminate($status = 0): never
     {
         exit($status);
     }
@@ -137,7 +137,7 @@ class System implements SystemProvider
             "file"     => $frame["file"],
             "line"     => $frame["line"],
             "function" => $this->getXdebugFrameFunction($frame),
-            "class"    => isset($frame["class"]) ? $frame["class"] : null,
+            "class"    => $frame["class"] ?? null,
             "type"     => $this->getXdebugStackFrameType($frame),
             "args"     => $this->getXdebugStackFrameArguments($frame),
         ]);
@@ -174,7 +174,7 @@ class System implements SystemProvider
         if (isset($frame["include_filename"])) {
             return [$frame["include_filename"]];
         }
-        return isset($frame["params"]) ? $frame["params"] : [];
+        return $frame["params"] ?? [];
     }
 
     /**

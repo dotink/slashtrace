@@ -24,7 +24,7 @@ class StackFrameCallHtmlFormatter extends StackFrameCallFormatter
         if (is_null($argument)) {
             return "argument-null";
         }
-        if (is_integer($argument)) {
+        if (is_int($argument)) {
             return "argument-integer";
         }
         if (is_float($argument)) {

@@ -7,11 +7,8 @@ use SlashTrace\StackTrace\StackTraceInspector;
 class MaxDepthStackTraceInspector extends StackTraceInspector
 {
 
-    private $maxDepth = 10;
-
-    public function __construct($maxDepth)
+    public function __construct(private $maxDepth)
     {
-        $this->maxDepth = $maxDepth;
     }
 
     public function fromException($exception)

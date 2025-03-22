@@ -133,7 +133,7 @@ class DebugTextRendererTest extends DebugTextRendererTestCase
 
         $output = $this->getOutput();
 
-        $this->assertEquals(str_repeat(" ", 6), substr($output[4], 0, 6));
+        $this->assertEquals(str_repeat(" ", 6), substr((string) $output[4], 0, 6));
     }
 
     public function testStackFramesAreIndexed()
@@ -152,8 +152,8 @@ class DebugTextRendererTest extends DebugTextRendererTestCase
 
         $output = $this->getOutput();
 
-        $this->assertEquals("#0", substr($output[3], 2, 2));
-        $this->assertEquals("#1", substr($output[5], 2, 2));
+        $this->assertEquals("#0", substr((string) $output[3], 2, 2));
+        $this->assertEquals("#1", substr((string) $output[5], 2, 2));
     }
 
     public function testMultipleExceptions()

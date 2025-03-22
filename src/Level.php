@@ -33,28 +33,9 @@ class Level
      */
     public static function severityToLevel($severity)
     {
-        switch ($severity) {
-            case E_USER_NOTICE:
-            case E_NOTICE:
-            case E_STRICT:
-                return self::INFO;
-
-            case E_WARNING:
-            case E_CORE_WARNING:
-            case E_COMPILE_WARNING:
-            case E_USER_WARNING:
-            case E_DEPRECATED:
-            case E_USER_DEPRECATED:
-                return self::WARNING;
-
-            case E_ERROR:
-            case E_PARSE:
-            case E_CORE_ERROR:
-            case E_COMPILE_ERROR:
-            case E_USER_ERROR:
-            case E_RECOVERABLE_ERROR:
-            default:
-                return self::ERROR;
-        }
+        return match ($severity) {
+            E_USER_NOTICE, E_NOTICE, E_WARNING, E_CORE_WARNING, E_COMPILE_WARNING, E_USER_WARNING, E_DEPRECATED, E_USER_DEPRECATED => self::WARNING,
+            default => self::ERROR,
+        };
     }
 }

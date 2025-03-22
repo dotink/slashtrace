@@ -18,7 +18,6 @@ class EventContextTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->context = new EventContext();
     }
 

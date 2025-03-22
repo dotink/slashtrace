@@ -98,7 +98,7 @@ class StackTraceInspector
         $frame = new StackFrame();
         $frame->setFile($exception->getFile());
         $frame->setLine($exception->getLine());
-        $frame->setClassName(get_class($exception));
+        $frame->setClassName($exception::class);
 
         if ($frame->getFile()) {
             $this->setFrameContext($frame);

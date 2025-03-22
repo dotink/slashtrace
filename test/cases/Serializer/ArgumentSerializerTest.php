@@ -16,7 +16,6 @@ class ArgumentSerializerTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->serializer = new ArgumentSerializer();
     }
 

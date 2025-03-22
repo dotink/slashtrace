@@ -27,12 +27,12 @@ abstract class StackFrameCallFormatter
         $functionName = $frame->getFunctionName();
 
         if ($className) {
-            $namespace = explode(StackFrameCallFormatter::NS, $className);
+            $namespace = explode(StackFrameCallFormatter::NS, (string) $className);
             $tags[] = $this->formatClass(array_pop($namespace));
         }
 
         if ($functionName) {
-            $namespace = array_merge($namespace, explode(StackFrameCallFormatter::NS, $functionName));
+            $namespace = array_merge($namespace, explode(StackFrameCallFormatter::NS, (string) $functionName));
             if ($className) {
                 $tags[] = $frame->getType();
             }

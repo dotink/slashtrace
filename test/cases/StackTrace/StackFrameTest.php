@@ -13,7 +13,6 @@ class StackFrameTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->frame = new StackFrame();
     }
 

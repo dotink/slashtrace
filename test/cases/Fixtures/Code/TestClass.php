@@ -9,10 +9,7 @@ use stdClass;
 
 class TestClass
 {
-    /** @var stdClass */
-    private $parameter;
-
-    private static function bar(TestClass $object, array $countries = [])
+    private static function bar(TestClass $object, array $countries = []): never
     {
         assert(is_object($object));
         assert(is_array($countries));
@@ -25,9 +22,8 @@ class TestClass
         return new LogicException();
     }
 
-    public function __construct(stdClass $parameter = null)
+    public function __construct(private readonly ?\stdClass $parameter = null)
     {
-        $this->parameter = $parameter;
     }
 
     public function initialize()

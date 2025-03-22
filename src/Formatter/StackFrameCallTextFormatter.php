@@ -4,16 +4,12 @@ namespace SlashTrace\Formatter;
 
 class StackFrameCallTextFormatter extends StackFrameCallFormatter
 {
-    /** @var StackTraceTagFormatter */
-    private $tagFormatter;
-
     /**
      * StackFrameCallTextFormatter constructor.
      * @param StackTraceTagFormatter $tagFormatter
      */
-    public function __construct(StackTraceTagFormatter $tagFormatter = null)
+    public function __construct(private readonly ?\SlashTrace\Formatter\StackTraceTagFormatter $tagFormatter = null)
     {
-        $this->tagFormatter = $tagFormatter;
     }
 
     protected function formatClass($class)

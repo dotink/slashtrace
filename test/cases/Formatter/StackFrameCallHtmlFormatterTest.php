@@ -89,7 +89,7 @@ class StackFrameCallHtmlFormatterTest extends StackFrameCallFormatterTestCase
     {
         $this->assertArguments(
             '<span class="argument argument-object">Object[stdClass]</span>, <span class="argument argument-object">Object[Closure]</span>, <span class="argument argument-object">Object[' . TemplateHelper::class . ']</span>',
-            [new stdClass(), function () {
+            [new stdClass(), function (): void {
             }, new TemplateHelper()]
         );
     }

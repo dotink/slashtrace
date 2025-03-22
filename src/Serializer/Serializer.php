@@ -44,7 +44,7 @@ class Serializer
             if ($input instanceof DateTime) {
                 return "DateTime[" . $this->serializeDate($input) . "]";
             }
-            return "Object[" . get_class($input) . "]";
+            return "Object[" . $input::class . "]";
 
         } else if (is_resource($input)) {
             return "resource[" . get_resource_type($input) . "]";
@@ -74,12 +74,12 @@ class Serializer
 
     private function isPrimitive($input)
     {
-        return is_null($input) || is_bool($input) || is_float($input) || is_integer($input);
+        return is_null($input) || is_bool($input) || is_float($input) || is_int($input);
     }
 
     private function isIterable($input)
     {
-        return is_array($input) || (is_object($input) && get_class($input) == "stdClass");
+        return is_array($input) || (is_object($input) && $input::class == "stdClass");
     }
 
     /**
@@ -92,11 +92,11 @@ class Serializer
 
     private function strlen($input)
     {
-        return function_exists("mb_strlen") ? mb_strlen($input) : strlen($input);
+        return function_exists("mb_strlen") ? mb_strlen((string) $input) : strlen((string) $input);
     }
 
     private function substr($input, $start, $length = null)
     {
-        return function_exists("mb_substr") ? mb_substr($input, $start, $length) : substr($input, $start, $length);
+        return function_exists("mb_substr") ? mb_substr((string) $input, $start, $length) : substr((string) $input, $start, $length);
     }
 }

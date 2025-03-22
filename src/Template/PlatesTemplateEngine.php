@@ -10,12 +10,6 @@ use League\Plates\Engine;
 class PlatesTemplateEngine implements TemplateEngine
 {
 	/**
-	 * @var ResourceLoader
-	 */
-	private $resourceLoader;
-
-
-	/**
 	 * @var Engine|null
 	 */
 	private $engine;
@@ -24,10 +18,9 @@ class PlatesTemplateEngine implements TemplateEngine
 	/**
 	 *
 	 */
-	public function __construct(ResourceLoader $resource_loader)
-	{
-		$this->resourceLoader = $resource_loader;
-	}
+	public function __construct(private readonly ResourceLoader $resourceLoader)
+    {
+    }
 
 
 	/**

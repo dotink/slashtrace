@@ -17,7 +17,6 @@ class ExceptionInspectorTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->inspector = new ExceptionInspector();
     }
 

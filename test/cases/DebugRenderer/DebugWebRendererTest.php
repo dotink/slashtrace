@@ -23,22 +23,20 @@ class DebugWebRendererTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->system = new MockSystemProvider();
 
         $this->renderer = new DebugWebRenderer();
         $this->renderer->setSystem($this->system);
     }
 
-    private function mockTemplateEngine(callable $renderCallback = null)
+    private function mockTemplateEngine(?callable $renderCallback = null)
     {
         $templateEngine = $this->createMock(TemplateEngine::class);
 
         if (!is_null($renderCallback)) {
             $templateEngine->expects($this->once())
                 ->method("render")
-                ->willReturnCallback(function ($template, array $data) use ($renderCallback) {
+                ->willReturnCallback(function ($template, array $data) use ($renderCallback): void {
                     $this->assertNotEmpty($template);
                     $renderCallback($data);
                 });
@@ -56,7 +54,7 @@ class DebugWebRendererTest extends TestCase
 
     public function testWhenEventHasNoExceptions_pageTitleIsDefault()
     {
-        $this->mockTemplateEngine(function (array $data) {
+        $this->mockTemplateEngine(function (array $data): void {
             $this->assertNotEmpty($data["pageTitle"]);
         });
         $this->renderer->render(new Event());
@@ -69,7 +67,7 @@ class DebugWebRendererTest extends TestCase
         $exception->setMessage("Test message");
         $event->addException($exception);
 
-        $this->mockTemplateEngine(function (array $data) use ($exception) {
+        $this->mockTemplateEngine(function (array $data) use ($exception): void {
             $this->assertEquals($exception->getMessage(), $data["pageTitle"]);
         });
 
@@ -79,7 +77,7 @@ class DebugWebRendererTest extends TestCase
     public function testEventIsPassedToTemplate()
     {
         $event = new Event();
-        $this->mockTemplateEngine(function (array $data) use ($event) {
+        $this->mockTemplateEngine(function (array $data) use ($event): void {
             $this->assertSame($event, $data["event"]);
         });
         $this->renderer->render($event);
@@ -87,7 +85,7 @@ class DebugWebRendererTest extends TestCase
 
     public function testResourceLoaderPassedToTemplate()
     {
-        $this->mockTemplateEngine(function (array $data) {
+        $this->mockTemplateEngine(function (array $data): void {
             $this->assertInstanceOf(ResourceLoader::class, $data["resourceLoader"]);
         });
         $this->renderer->render(new Event());

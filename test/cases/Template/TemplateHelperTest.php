@@ -19,8 +19,6 @@ class TemplateHelperTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->helper = new TemplateHelper();
         $this->frame = new StackFrame();
     }

@@ -15,11 +15,6 @@ class Breadcrumbs implements JsonSerializable
 	const MAX_SIZE = 25;
 
 	/**
-	 * @var SystemProvider
-	 */
-	private $system;
-
-	/**
 	 *  @var Breadcrumb[]
 	 */
 	private $crumbs = [];
@@ -28,10 +23,9 @@ class Breadcrumbs implements JsonSerializable
 	/**
 	 *
 	 */
-	public function __construct(SystemProvider $system)
-	{
-		$this->system = $system;
-	}
+	public function __construct(private readonly SystemProvider $system)
+    {
+    }
 
 	/**
 	 * @param array<string, mixed> $data

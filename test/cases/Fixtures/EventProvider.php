@@ -161,7 +161,7 @@ class EventProvider
 
     private function getApplicationPath()
     {
-        return dirname(dirname(dirname(__FILE__)));
+        return dirname(__FILE__, 3);
     }
 
     private function createBreadcrumbs()

@@ -18,8 +18,6 @@ class BreadcrumbsTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->system = new MockSystemProvider();
         $this->crumbs = new Breadcrumbs($this->system);
     }

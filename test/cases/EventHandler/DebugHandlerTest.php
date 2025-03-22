@@ -33,15 +33,13 @@ class DebugHandlerTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->system = new MockSystemProvider();
 
         $this->handler = new DebugHandler();
         $this->handler->setSystem($this->system);
     }
 
-    private function handleException(Exception $e = null): int
+    private function handleException(?\Throwable $e = null): int
     {
         return $this->handler->handleException($e ?: new Exception());
     }
@@ -50,7 +48,7 @@ class DebugHandlerTest extends TestCase
      * @param callable|null $renderCallback
      * @return MockObject|DebugRenderer
      */
-    private function mockRenderer(callable $renderCallback = null)
+    private function mockRenderer(?callable $renderCallback = null)
     {
         $renderer = $this->createMock(DebugRenderer::class);
 
@@ -119,7 +117,7 @@ class DebugHandlerTest extends TestCase
     {
         $exception = new ErrorException("Message", 1234, E_USER_WARNING);
 
-        $this->mockRenderer(function (Event $event) use ($exception) {
+        $this->mockRenderer(function (Event $event) use ($exception): void {
             $this->assertSame(Level::severityToLevel($exception->getSeverity()), $event->getLevel());
 
             $exceptions = $event->getExceptions();
@@ -137,7 +135,7 @@ class DebugHandlerTest extends TestCase
         $innerException = new Exception("Inner exception message", 1234);
         $outerException = new RuntimeException("Outer exception message", 5678, $innerException);
 
-        $this->mockRenderer(function (Event $event) use ($outerException, $innerException) {
+        $this->mockRenderer(function (Event $event) use ($outerException, $innerException): void {
             $exceptions = $event->getExceptions();
 
             $this->assertEquals($outerException->getMessage(), $exceptions[0]->getMessage());
@@ -152,7 +150,7 @@ class DebugHandlerTest extends TestCase
 
     public function testEventsHaveContext()
     {
-        $this->mockRenderer(function (Event $event) {
+        $this->mockRenderer(function (Event $event): void {
             $this->assertInstanceOf(EventContext::class, $event->getContext());
         });
         $this->handleException();
@@ -163,7 +161,7 @@ class DebugHandlerTest extends TestCase
         $request = $this->createMock(Request::class);
         $this->system->setIsWeb($request);
 
-        $this->mockRenderer(function (Event $event) use ($request) {
+        $this->mockRenderer(function (Event $event) use ($request): void {
             $this->assertSame($request, $event->getContext()->getHTTPRequest());
         });
 
@@ -176,7 +174,7 @@ class DebugHandlerTest extends TestCase
 
         $this->handler->setRelease($release);
 
-        $this->mockRenderer(function (Event $event) use ($release) {
+        $this->mockRenderer(function (Event $event) use ($release): void {
             $this->assertEquals($release, $event->getContext()->getRelease());
         });
 
@@ -189,7 +187,7 @@ class DebugHandlerTest extends TestCase
 
         $this->system->setServerData($data);
 
-        $this->mockRenderer(function (Event $event) use ($data) {
+        $this->mockRenderer(function (Event $event) use ($data): void {
             $this->assertEquals($data, $event->getContext()->getServer());
         });
 
@@ -203,7 +201,7 @@ class DebugHandlerTest extends TestCase
 
         $this->handler->setUser($user);
 
-        $this->mockRenderer(function (Event $event) use ($user) {
+        $this->mockRenderer(function (Event $event) use ($user): void {
             $this->assertSame($user, $event->getContext()->getUser());
         });
 
@@ -216,7 +214,7 @@ class DebugHandlerTest extends TestCase
         $crumbData = ["foo" => "bar"];
         $this->handler->recordBreadcrumb($crumbTitle, $crumbData);
 
-        $this->mockRenderer(function (Event $event) use ($crumbTitle, $crumbData) {
+        $this->mockRenderer(function (Event $event) use ($crumbTitle, $crumbData): void {
             $context = $event->getContext();
 
             $breadcrumb = $context->getBreadcrumbs()->getCrumbs()[0];
@@ -232,7 +230,7 @@ class DebugHandlerTest extends TestCase
         $path = "/var/www/example";
         $this->handler->setApplicationPath($path);
 
-        $this->mockRenderer(function (Event $event) use ($path) {
+        $this->mockRenderer(function (Event $event) use ($path): void {
             $this->assertEquals($path, $event->getContext()->getApplicationPath());
         });
 

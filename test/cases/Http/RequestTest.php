@@ -15,7 +15,6 @@ class RequestTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->request = new Request();
     }
 

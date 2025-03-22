@@ -29,7 +29,7 @@ class HumanSerializer
             }
             return strval($input);
         }
-        if (is_integer($input)) {
+        if (is_int($input)) {
             return strval($input);
         }
 

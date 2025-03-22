@@ -20,7 +20,7 @@ class ExceptionInspector
         $exceptionData = new ExceptionData();
 
         $exceptionData->setMessage($exception->getMessage());
-        $exceptionData->setType(get_class($exception));
+        $exceptionData->setType($exception::class);
         $exceptionData->setStackTrace($this->getStackTrace($exception));
 
         return $exceptionData;

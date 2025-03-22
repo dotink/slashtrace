@@ -37,8 +37,6 @@ abstract class DebugTextRendererTestCase extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->renderer = $this->createRenderer();
         $this->outputReceiver = new OutputReceiverSpy();
 

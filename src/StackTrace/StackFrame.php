@@ -107,10 +107,10 @@ class StackFrame implements JsonSerializable
     public function getRelativeFile($rootPath = null)
     {
         $path = $this->getFile();
-        if (is_null($rootPath) || substr($path, 0, strlen($rootPath)) != $rootPath) {
+        if (is_null($rootPath) || !str_starts_with((string) $path, $rootPath)) {
             return $path;
         }
-        return ltrim(substr($path, strlen($rootPath)), "/\\");
+        return ltrim(substr((string) $path, strlen($rootPath)), "/\\");
     }
 
     public function jsonSerialize(): array
@@ -121,9 +121,7 @@ class StackFrame implements JsonSerializable
             "at"        => $callFormatter->format($this),
             "file"      => $this->getFile(),
             "line"      => $this->getLine(),
-            "arguments" => array_map(function ($argument) use ($serializer) {
-                return $serializer->serialize($argument);
-            }, $this->getArguments()),
+            "arguments" => array_map(fn($argument) => $serializer->serialize($argument), $this->getArguments()),
         ]);
     }
 }

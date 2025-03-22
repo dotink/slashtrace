@@ -25,8 +25,6 @@ class StackTraceInspectorTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->inspector = new StackTraceInspector();
 
         $this->contextExtractor = new MockStackFrameContextExtractor();
@@ -96,7 +94,7 @@ class StackTraceInspectorTest extends TestCase
         $data = [
             "file"     => __FILE__,
             "line"     => __LINE__,
-            "class"    => __CLASS__,
+            "class"    => self::class,
             "function" => __METHOD__,
             "type"     => "->",
             "args"     => ["argument 1", "argument 2", new stdClass()]
@@ -162,7 +160,7 @@ class StackTraceInspectorTest extends TestCase
                 "line"  => __LINE__
             ],
             [
-                "class" => get_class($this),
+                "class" => static::class,
                 "file"  => __FILE__,
                 "line"  => __LINE__
             ]
@@ -178,12 +176,12 @@ class StackTraceInspectorTest extends TestCase
     {
         $stacktrace = [
             [
-                "class" => __CLASS__,
+                "class" => self::class,
                 "file"  => "/some/file",
                 "line"  => __LINE__
             ],
             [
-                "class" => __CLASS__,
+                "class" => self::class,
                 "file"  => "/some/other/file",
                 "line"  => __LINE__
             ]

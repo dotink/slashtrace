@@ -69,7 +69,7 @@ class VarDumper
     private function getOutputCallback()
     {
         if (is_null($this->outputCallback)) {
-            $this->outputCallback = function ($line, $depth) {
+            $this->outputCallback = function ($line, $depth): void {
                 if ($depth < 0) {
                     return;
                 }

@@ -17,8 +17,6 @@ class DebugJsonRendererTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->system = new MockSystemProvider();
 
         $this->renderer = new DebugJsonRenderer();

@@ -101,7 +101,7 @@ class DebugTextRenderer implements DebugRenderer
         );
 
         if ($frame->getFile()) {
-            $indent = self::INDENT + 2 + strlen($index);
+            $indent = self::INDENT + 2 + strlen((string) $index);
             $this->out($this->formatStackFrameLocation($frame), $indent);
         }
     }
@@ -165,7 +165,7 @@ class DebugTextRenderer implements DebugRenderer
         if (!$data) {
             return;
         }
-        $this->out($this->renderBreadcrumbData($data), 4 + strlen($index));
+        $this->out($this->renderBreadcrumbData($data), 4 + strlen((string) $index));
     }
 
     protected function renderBreadcrumbData(array $data)

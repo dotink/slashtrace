@@ -26,8 +26,6 @@ class ErrorHandlerTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->system = new MockSystemProvider();
 
         /** @noinspection PhpParamsInspection */
@@ -188,7 +186,7 @@ class ErrorHandlerTest extends TestCase
         ];
         $actual = null;
 
-        $this->system->setErrorHandler(function ($level, $message, $file, $line) use (&$actual) {
+        $this->system->setErrorHandler(function ($level, $message, $file, $line) use (&$actual): void {
             $actual = [
                 "level"   => $level,
                 "message" => $message,
@@ -208,7 +206,7 @@ class ErrorHandlerTest extends TestCase
         $exception = new Exception();
         $actual = null;
 
-        $this->system->setExceptionHandler(function ($e) use (&$actual) {
+        $this->system->setExceptionHandler(function ($e) use (&$actual): void {
             $actual = $e;
         });
 
@@ -221,7 +219,7 @@ class ErrorHandlerTest extends TestCase
     public function testPreviousExceptionHandlerIsNotCalledForErrors()
     {
         $called = false;
-        $this->system->setExceptionHandler(function () use (&$called) {
+        $this->system->setExceptionHandler(function () use (&$called): void {
             $called = true;
         });
 
@@ -234,9 +232,7 @@ class ErrorHandlerTest extends TestCase
     public function testExecutionIsNotStoppedWhenServiceReturnContinueSignal()
     {
         $handler = new ErrorHandler(
-            $this->mockSlashTrace(function () {
-                return EventHandler::SIGNAL_CONTINUE;
-            }),
+            $this->mockSlashTrace(fn() => EventHandler::SIGNAL_CONTINUE),
             $this->system
         );
 
@@ -248,9 +244,7 @@ class ErrorHandlerTest extends TestCase
     public function testExecutionIsStoppedWhenServiceReturnsExitSignal()
     {
         $handler = new ErrorHandler(
-            $this->mockSlashTrace(function () {
-                return EventHandler::SIGNAL_EXIT;
-            }),
+            $this->mockSlashTrace(fn() => EventHandler::SIGNAL_EXIT),
             $this->system
         );
 
@@ -263,15 +257,13 @@ class ErrorHandlerTest extends TestCase
     {
         $handlerCallTime = 0.0;
 
-        $this->system->setExceptionHandler(function () use (&$handlerCallTime) {
+        $this->system->setExceptionHandler(function () use (&$handlerCallTime): void {
             $handlerCallTime = microtime(true);
             usleep(1000);
         });
 
         $handler = new ErrorHandler(
-            $this->mockSlashTrace(function () {
-                return EventHandler::SIGNAL_EXIT;
-            }),
+            $this->mockSlashTrace(fn() => EventHandler::SIGNAL_EXIT),
             $this->system
         );
         $handler->install();
@@ -283,15 +275,13 @@ class ErrorHandlerTest extends TestCase
     public function testPreviousErrorHandlerIsCalledBeforeExecutionIsTerminated()
     {
         $handlerCallTime = 0.0;
-        $this->system->setErrorHandler(function () use (&$handlerCallTime) {
+        $this->system->setErrorHandler(function () use (&$handlerCallTime): void {
             $handlerCallTime = microtime(true);
             usleep(1000);
         });
 
         $handler = new ErrorHandler(
-            $this->mockSlashTrace(function () {
-                return EventHandler::SIGNAL_EXIT;
-            }),
+            $this->mockSlashTrace(fn() => EventHandler::SIGNAL_EXIT),
             $this->system
         );
         $handler->install();

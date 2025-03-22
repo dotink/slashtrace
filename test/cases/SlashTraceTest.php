@@ -36,7 +36,7 @@ class SlashTraceTest extends TestCase
      * @param callable|null $handleCallback
      * @return MockObject|EventHandler
      */
-    private function mockHandler(callable $handleCallback = null)
+    private function mockHandler(?callable $handleCallback = null)
     {
         $handler = $this->createMock(EventHandler::class);
 
@@ -52,7 +52,7 @@ class SlashTraceTest extends TestCase
         return $handler;
     }
 
-    private function handleException(Exception $e = null)
+    private function handleException(?\Throwable $e = null)
     {
         return $this->slashtrace->handleException($e ?: new Exception());
     }
@@ -126,7 +126,7 @@ class SlashTraceTest extends TestCase
         $exception = new ErrorException("Message", 1234, E_USER_WARNING);
 
         for ($i = 0; $i < 5; $i++) {
-            $this->mockHandler(function (Exception $e) use ($exception) {
+            $this->mockHandler(function (Exception $e) use ($exception): void {
                 $this->assertSame($exception, $e);
             });
         }
@@ -193,22 +193,16 @@ class SlashTraceTest extends TestCase
 
     public function testContinueSignalIsReturned()
     {
-        $this->mockHandler(function () {
-            return EventHandler::SIGNAL_CONTINUE;
-        });
+        $this->mockHandler(fn() => EventHandler::SIGNAL_CONTINUE);
 
-        $this->mockHandler(function () {
-            return EventHandler::SIGNAL_CONTINUE;
-        });
+        $this->mockHandler(fn() => EventHandler::SIGNAL_CONTINUE);
 
         $this->assertEquals(EventHandler::SIGNAL_CONTINUE, $this->handleException());
     }
 
     public function testExitSignalIsReturned()
     {
-        $this->mockHandler(function () {
-            return EventHandler::SIGNAL_EXIT;
-        });
+        $this->mockHandler(fn() => EventHandler::SIGNAL_EXIT);
 
         $handler = $this->createMock(EventHandler::class);
         $handler->expects($this->never())->method("handleException");
@@ -223,7 +217,7 @@ class SlashTraceTest extends TestCase
     {
         $handlerException = new EventHandlerException("Error message", 400);
 
-        $this->mockHandler(function () use ($handlerException) {
+        $this->mockHandler(function () use ($handlerException): void {
             throw $handlerException;
         });
 
@@ -240,7 +234,7 @@ class SlashTraceTest extends TestCase
     {
         $handlerException = new EventHandlerException("Error message");
 
-        $this->mockHandler(function () use ($handlerException) {
+        $this->mockHandler(function () use ($handlerException): void {
             throw $handlerException;
         });
 

@@ -15,7 +15,6 @@ class UserTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->user = new User();
     }
 

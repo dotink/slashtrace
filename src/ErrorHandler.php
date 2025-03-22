@@ -10,22 +10,14 @@ use Exception;
 
 class ErrorHandler
 {
-    /** @var SlashTrace */
-    private $slashTrace;
-
-    /** @var SystemProvider */
-    private $system;
-
     /** @var callable|null */
     private $previousErrorHandler;
 
     /** @var callable|null */
     private $previousExceptionHandler;
 
-    public function __construct(SlashTrace $slashTrace, SystemProvider $system)
+    public function __construct(private readonly SlashTrace $slashTrace, private readonly SystemProvider $system)
     {
-        $this->slashTrace = $slashTrace;
-        $this->system = $system;
     }
 
     /**
@@ -92,9 +84,9 @@ class ErrorHandler
     {
         $system = $this->system;
 
-        $this->previousErrorHandler = $system->setErrorHandler([$this, "onError"]);
-        $this->previousExceptionHandler = $system->setExceptionHandler([$this, "onException"]);
+        $this->previousErrorHandler = $system->setErrorHandler($this->onError(...));
+        $this->previousExceptionHandler = $system->setExceptionHandler($this->onException(...));
 
-        $system->registerShutdownFunction([$this, "onShutdown"]);
+        $system->registerShutdownFunction($this->onShutdown(...));
     }
 }

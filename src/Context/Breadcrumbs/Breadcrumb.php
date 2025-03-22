@@ -11,30 +11,11 @@ use DateTime;
 class Breadcrumb implements JsonSerializable
 {
 	/**
-	 * @var string
-	 */
-	private $title;
-
-	/**
-	 * @var array<string, mixed>
-	 */
-	private $data = [];
-
-	/**
-	 * @var DateTime
-	 */
-	private $dateTime;
-
-
-	/**
 	 * @param array<string, mixed> $data
 	 */
-	public function __construct(string $title, array $data, DateTime $date_time)
-	{
-		$this->title    = $title;
-		$this->data     = $data;
-		$this->dateTime = $date_time;
-	}
+	public function __construct(private readonly string $title, private readonly array $data, private readonly DateTime $dateTime)
+    {
+    }
 
 
 	/**
