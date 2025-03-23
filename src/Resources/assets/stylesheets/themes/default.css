@@ -131,6 +131,7 @@ ul.stacktrace li div.location span {
 }
 .prettyprint {
     font-family: "Source Code Pro", Monaco, Consolas, "Lucida Console", monospace;
+	background-color: transparent !important;
 }
 .prettyprint ol li.active {
     background: rgba(0, 0, 0, 0.3);
