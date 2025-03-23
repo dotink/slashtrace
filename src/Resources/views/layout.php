@@ -13,7 +13,7 @@
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<title><?= $this->escape($pageTitle); ?></title>
 	</head>
-	<body style="width: 100%; height: auto; margin: 0; padding: 0;">
+	<body>
 		<?= $resourceLoader->stylesheet("bootstrap.css"); ?>
 		<?= $resourceLoader->stylesheet("fontello.css"); ?>
 		<?= $resourceLoader->stylesheet("main.css"); ?>
