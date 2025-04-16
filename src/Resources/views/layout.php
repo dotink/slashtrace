@@ -6,7 +6,7 @@
  */
 ?>
 <!doctype html>
-	<html lang="en">
+<html lang="en">
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -22,6 +22,7 @@
 		<div id="page">
 			<?= $this->section("content"); ?>
 		</div>
+
 		<?= $resourceLoader->script("prettify.js"); ?>
 		<?= $resourceLoader->script("main.js"); ?>
 	</body>

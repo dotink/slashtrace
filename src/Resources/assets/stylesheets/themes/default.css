@@ -36,6 +36,11 @@ ul.stacktrace > li > div, .frame-context div.code {
 ul.stacktrace > li > div span {
     color: rgba(255, 255, 255, 0.4);
 }
+
+ul.stacktrace > li > div h3 {
+    color: white;
+}
+
 ul.stacktrace > li > ul > li {
     border: 1px solid #DADDDF;
     border-right-color: transparent;;
