@@ -17,7 +17,7 @@ class StackFrameContextExtractor
      */
     public function getContext($file, $line, $contextLines = 15)
     {
-        if ($file === "Unknown") {
+        if ($file === "Unknown" || str_contains($file, 'eval()')) {
             return [];
         }
         if (!file_exists($file)) {
